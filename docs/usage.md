@@ -2,6 +2,8 @@
 
 > Reader: the vault owner after installation — the next step after `owfa init` — plus anyone who wants to understand the collaboration shape. Command details are authoritatively disclosed in each SKILL.md under `.agents/skills/`. This document is about chaining workflows: how single commands connect into loops. Usage examples run against the suite-package pipeline path `.owfa/plugins/domains/personal/pipeline.py` (a deprecated host copy remains at `.owfa/scripts/pipeline.py` until framework 0.5.0).
 
+> Install & deploy: the framework's [quickstart](https://github.com/owfadev/owfa/blob/master/.owfa/docs/quickstart.md) / [deployment guide](https://github.com/owfadev/owfa/blob/master/.owfa/docs/deployment.md).
+
 ## Loop One: Vault Stewardship
 
 The general loop; a few minutes a day.

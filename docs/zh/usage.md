@@ -2,6 +2,8 @@
 
 > 读者：安装完成之后的 vault 主人——`owfa init` 的下一步——以及想理解协作形态的人。命令细节的权威披露在各 `.agents/skills/` 下的 SKILL.md；本文讲的是工作流的串联：单条命令如何连成循环。示例统一用套件包内的 pipeline 路径 `.owfa/plugins/domains/personal/pipeline.py`（框架树里的弃用宿主副本 `.owfa/scripts/pipeline.py` 保留至 0.5.0）。
 
+> 安装与部署见框架仓 [quickstart](https://github.com/owfadev/owfa/blob/master/.owfa/docs/quickstart.md) / [deployment](https://github.com/owfadev/owfa/blob/master/.owfa/docs/deployment.md)。
+
 ## 循环一：vault 日常经营
 
 通用循环；每天几分钟。
