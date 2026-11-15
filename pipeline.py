@@ -15,7 +15,8 @@ post-write self-attestation (the minimal attester form): the LLM executes, the s
 certifies.
 
 Usage:
-  python .owfa/scripts/pipeline.py index              # rebuild indexes (overflow-offloading scheme, idempotent; includes deleting surplus indexes after merging back)
+  python .owfa/plugins/domains/personal/pipeline.py index  # canonical suite location (host shim: .owfa/scripts/pipeline.py, deprecated)
+  python .owfa/scripts/pipeline.py index              # deprecated host shim, retires in 0.5.0 (overflow-offloading scheme, idempotent; includes deleting surplus indexes after merging back)
   python .owfa/scripts/pipeline.py tags               # rebuild wiki/tags.md (idempotent)
   python .owfa/scripts/pipeline.py hot <type> <one-liner>   # evict out-of-window entries + prepend a hot-cache entry
   python .owfa/scripts/pipeline.py log <type> <one-liner> [--domain domain]   # capacity archive + prepend a log line (domain tag optional — domainless transactions)
@@ -66,7 +67,7 @@ LOG_MAX_ENTRIES = 100
 INDEX_MAX_ENTRIES = 25  # single index-list window (page entries + directory entries; overflow-offloading split basis)
 TYPE_ORDER = ["map", "save", "query", "check", "plugin", "todo", "profile", "other"]
 HOT_HEADER = ("# 热缓存\n\n> 最近变更摘要；≤25 条且 <5 日，窗外即删；可整体再生。"
-              "规则见 `.owfa/plugins/hot/`，写走 `pipeline.py hot`。\n")
+              "规则见 `.owfa/plugins/domains/personal/hot/`，写走 `pipeline.py hot`。\n")
 LOG_HEADER = ("# 运行日志\n\n> 置顶追加、只增不删；条目 = `- YYYY-MM-DD <类型> [<域>]：一句话`（域标可缺省——无域事务，log 桥）。"
               "规则见 `.owfa/plugins/domains/personal/log/`，写走 `pipeline.py log`。\n")
 DATE_RE = re.compile(r"^- (\d{4}-\d{2}-\d{2}) ")

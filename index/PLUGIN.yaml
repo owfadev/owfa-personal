@@ -4,7 +4,7 @@ version: 0.15
 depends:
   - tag
   - wiki
-updated: 2026-11-09
+updated: 2026-11-15
 attachment:
   - "wiki/index.md — root index (always present; carries format_version; directly lists reachable pages)"
   - "Per-directory index.md — born of the overflow-offloading scheme (split out when a list overflows the window, disappearing on rebuild once merged back into the parent)"

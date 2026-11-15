@@ -4,7 +4,7 @@ version: 0.17
 bridge: 必依
 depends:
   - wiki
-updated: 2026-11-09
+updated: 2026-11-15
 attachment:
   - "wiki/log.md — single-file operation journal (rolling window)"
   - "wiki/archive/YYYY-MM/log.md — archive spillover (immutable zone, grouped by entry month)"
