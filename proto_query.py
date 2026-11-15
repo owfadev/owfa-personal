@@ -48,7 +48,7 @@ WIKI = os.path.join(ROOT, "wiki")
 
 SEMANTICS = ("list", "get", "search", "recent")
 WINDOW_RE = re.compile(r"^(\d+)([dm])$")
-FM_RE = re.compile(r"^---\n(.*?)\n---", re.S)
+FM_RE = re.compile(r"^---\r?\n(.*?)\r?\n---", re.S)
 CREATE_HINTS = ("create", "created", "新建", "建立", "创设")
 
 
@@ -91,11 +91,40 @@ def parse_frontmatter(text):
     return fm
 
 
+def get_direct_path(addr):
+    """Resolve a walk-missed addr to a readable path under wiki/, or None.
+
+    Security: the addr must be a safe relative path (no absolute, no '..' escape, no
+    drive/UNC tricks), resolve inside wiki/, and not fall under wiki/tmp/ (invisible
+    to this face). Anything else is treated as not found, never opened."""
+    if not addr or addr != addr.strip() or "\\" in addr:
+        return None
+    if addr.startswith("/") or re.match(r"^[A-Za-z]:", addr):
+        return None
+    rel = addr + ".md"
+    parts = rel.split("/")
+    if any(p in ("", ".", "..") for p in parts):
+        return None
+    base = os.path.realpath(WIKI)
+    path = os.path.realpath(os.path.join(WIKI, *parts))
+    if not (path == base or path.startswith(base + os.sep)):
+        return None
+    rel_checked = os.path.relpath(path, base).replace(os.sep, "/")
+    if rel_checked == "tmp.md" or rel_checked.startswith("tmp/"):
+        return None
+    if not (os.path.isfile(path) and path.endswith(".md")):
+        return None
+    return path
+
+
 def walk_pages():
-    """Yield (addr, full path, frontmatter, body) for every md under wiki/, addr-sorted."""
+    """Yield (addr, full path, frontmatter, body) for every md under wiki/ (wiki/tmp/
+    excluded — tmp plugin invisible-to-derived-layer semantics; the ABI face is an
+    external consumer, not the derived layer, so drafts never surface here), addr-sorted."""
     out = []
     for dirpath, dirs, files in os.walk(WIKI):
         dirs.sort()
+        dirs[:] = [d for d in dirs if os.path.join(dirpath, d) != os.path.join(WIKI, "tmp")]
         for fn in sorted(files):
             if not fn.endswith(".md"):
                 continue
@@ -222,6 +251,18 @@ def main(argv):
                 it = item(a, p, fm, {"content": body})
                 print(json.dumps(it, ensure_ascii=False))
                 return
+        # Walk miss. The walk skips undecodable pages, so a file may still exist here:
+        # never lie about existence — open it directly (read-only) with replacement
+        # decoding. wiki/tmp/ stays invisible to this face (tmp plugin semantics).
+        path = get_direct_path(addr)
+        if path is not None:
+            text = open(path, encoding="utf-8", errors="replace").read()
+            fm = parse_frontmatter(text)
+            m = FM_RE.match(text)
+            body = text[m.end():] if m else text
+            it = item(addr, path, fm, {"content": body})
+            print(json.dumps(it, ensure_ascii=False))
+            return
         die("not_found", "no page at addr %r" % addr)
 
     elif semantic == "search":

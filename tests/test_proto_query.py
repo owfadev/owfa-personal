@@ -62,6 +62,14 @@ class Fixture:
         t = datetime.datetime.strptime(day, "%Y-%m-%d").timestamp()
         os.utime(path, (t, t)) if path else None
 
+    def write_bytes(self, rel, data, mtime=None):
+        p = os.path.join(self.tmp, "wiki", rel)
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        with open(p, "wb") as f:
+            f.write(data)
+        if mtime:
+            self.mkdate(mtime, p)
+
     def run(self, *args):
         script = os.path.join(self.tmp, ".owfa", "plugins", "domains", "personal", "proto_query.py")
         r = subprocess.run([sys.executable, script] + list(args),
@@ -137,6 +145,40 @@ class TestProtoQuery(unittest.TestCase):
             self.assertEqual((code, out["ok"], out["error_code"]), (0, False, "bad_request"))
             code, out = fx.run("frobnicate")
             self.assertEqual((code, out["ok"], out["error_code"]), (0, False, "unsupported_semantic"))
+
+    def test_tmp_subtree_invisible(self):
+        with Fixture() as fx:
+            fx.write("tmp/draft.md", "---\ntype: note\n---\ndraft needle42\n")
+            code, out = fx.run("list")
+            self.assertNotIn("tmp/draft", [it["addr"] for it in out["items"]])
+            code, out = fx.run("search", "needle42")
+            self.assertNotIn("tmp/draft", [it["addr"] for it in out["items"]])
+            code, out = fx.run("recent")
+            self.assertNotIn("tmp/draft", {it["addr"] for it in out["items"]})
+            code, out = fx.run("get", "tmp/draft")     # tmp invisible to the ABI face
+            self.assertEqual((code, out["ok"], out["error_code"]), (0, False, "not_found"))
+            code, out = fx.run("get", "tmp/../notes/fresh")  # traversal-ish tmp path: refused
+            self.assertEqual((code, out["ok"], out["error_code"]), (0, False, "not_found"))
+
+    def test_get_undecodable_page_returns_content(self):
+        with Fixture() as fx:
+            fx.write_bytes("notes/binary.md",
+                           b"---\ntype: note\n---\nraw \xff\xfe bytes\n")
+            code, out = fx.run("get", "notes/binary")
+            self.assertEqual((code, out.get("addr")), (0, "notes/binary"))  # exists -> never not_found
+            self.assertIn("raw ", out["content"])
+            code, out = fx.run("list")               # walk still skips it
+            self.assertNotIn("notes/binary", [it["addr"] for it in out["items"]])
+
+    def test_crlf_frontmatter_kind(self):
+        with Fixture() as fx:
+            fx.write_bytes("notes/crlf.md",
+                           b"---\r\ntype: note\r\ntitle: CRLF Page\r\n---\r\nbody\r\n")
+            code, out = fx.run("get", "notes/crlf")
+            self.assertEqual(out["kind"], "note")
+            self.assertEqual(out["title"], "CRLF Page")
+            code, out = fx.run("list", "--kind", "note")
+            self.assertIn("notes/crlf", [it["addr"] for it in out["items"]])
 
 
 if __name__ == "__main__":

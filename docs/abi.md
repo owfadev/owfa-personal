@@ -13,6 +13,12 @@
 Addresses are case-sensitive and never invented outside this rule — no intermediate
 addressing layer exists.
 
+`wiki/tmp/` is **not on the ABI face** (tmp plugin invisible-to-derived-layer semantics):
+drafts are neither listed, searched, nor recent-tracked, and `get` on a `wiki/tmp/` addr
+answers `not_found`. `get` also never lies about existence: a page that exists but cannot
+be decoded as UTF-8 (skipped by the listing walk) is still returned — read-only, decoded
+with replacement characters.
+
 ## Kind vocabulary
 
 `kind` = the page's frontmatter `type` field (open vocabulary — see the notes plugin for
@@ -48,7 +54,7 @@ only a process crash exits non-zero.
 
 | error_code | when |
 |---|---|
-| `not_found` | `get` on an addr with no page |
+| `not_found` | `get` on an addr with no page, or on one under `wiki/tmp/` |
 | `bad_request` | missing/invalid arguments (invalid `--window`, missing `<addr>`/`<expr>`) |
 | `unsupported_semantic` | first argument is not one of list/get/search/recent |
 | `internal` | the package cannot serve the query (e.g. PKG.yaml unreadable) |
