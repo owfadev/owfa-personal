@@ -3,7 +3,7 @@ id: personal
 kind: protocol
 protocol: vaultwiki
 version: 0.1.2
-compat: ">= 0.4.3"
+compat: ">= 0.4"
 members: [calendar, cron, device, domain, hot, index, instance-git, language, link, log, mapping, notes, sessions, structure, tag, tmp, todo, trust, user-profile, vault, wiki]
 depends: [framework]
 skeleton: [vault/, wiki/notes/, wiki/sessions/, wiki/vault/]

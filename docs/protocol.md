@@ -81,7 +81,7 @@ Window parameters (the script source is the authoritative rule list): hot ≤ **
 
 ## Member Roster
 
-The 21 members (versions verbatim from each PLUGIN.yaml; package `personal` v0.1.2, `kind: protocol` / `protocol: vaultwiki`, `compat: ">= 0.4.3"`):
+The 21 members (versions verbatim from each PLUGIN.yaml; package `personal` v0.1.2, `kind: protocol` / `protocol: vaultwiki`, `compat: ">= 0.4"`):
 
 | id | one line | version |
 |---|---|---|

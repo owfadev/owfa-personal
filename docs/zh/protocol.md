@@ -81,7 +81,7 @@
 
 ## 成员名册
 
-21 个成员（版本逐字取自各自 PLUGIN.yaml；包 `personal` v0.1.2、`kind: protocol` / `protocol: vaultwiki`、`compat: ">= 0.4.3"`）：
+21 个成员（版本逐字取自各自 PLUGIN.yaml；包 `personal` v0.1.2、`kind: protocol` / `protocol: vaultwiki`、`compat: ">= 0.4"`）：
 
 | id | 一句话 | 版本 |
 |---|---|---|
