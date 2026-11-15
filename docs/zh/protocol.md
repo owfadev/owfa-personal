@@ -6,7 +6,7 @@
 
 **llmwiki → vault-wiki → OWFA 默认协议。**「给 agent 经营的信息库配一套 wiki over 纯文件 vault」的想法源于 llmwiki，在 vault-wiki 框架中成形（2026-08 个人 vault 建立；09-08 插件原型落地），自 OWFA v0.4 起以独立包发布——即本套件 **personal**，该组织原则的第一个、目前也是唯一的一个实现。
 
-先说清一个用语：自框架 0.4.3 起，内核已支持 `kind: protocol`（随 `protocol:` 字段与 org 能力声明），本包即为首个协议包——`protocol: vaultwiki`、`provides: vaultwiki.org.v1`。协议 ABI 自 0.1.3 起是在位机器：包根 `proto_query.py` 在 wiki 面上提供四个语义——`list`、`get`、`search`、`recent`；规范性细节见 [docs/abi.md](../abi.md)，一致性测试见 [tests/](../../tests/)。本文描述的是 21 个成员加 `pipeline.py` 实际实现的东西。
+先说清一个用语：自框架 0.4.3 起，内核已支持 `kind: protocol`（随 `protocol:` 字段与 org 能力声明），本包即为首个协议包——`protocol: vaultwiki`、`provides: vaultwiki.org.v1`。协议 ABI 自 0.1.3 起是在位机器：包根 `proto_query.py` 在 wiki 面上提供四个语义——`list`、`get`、`search`、`recent`；规范性细节见 [docs/abi.md](abi.md)，一致性测试见 [tests/](../../tests/)。本文描述的是 21 个成员加 `pipeline.py` 实际实现的东西。
 
 ## 协议是什么
 
@@ -16,7 +16,7 @@
 2. **自足基线**——零额外装包，workspace 即完整：map、save、query、check 全线可用。各 domain（cuhksz、lark、email、bili……）是在这套基线结构上加装的扩展件（复用而非租用），不是它的前提。
 3. **服务面**——全体成员共用的横切服务：派生层（index、tags、hot、log）、检索惯例、提炼区（notes、sessions）、check 规则集，以及 ABI 面。
 
-**ABI 面就是整个 `wiki/`**——加装域的领土在内（bili/lark/cuhksz 的页面类型照常服务），`wiki/tmp/` 在外（tmp 的派生层不可见语义延伸到 ABI）。页面按 wiki 相对路径寻址（即 `[[...]]` 链接语法的全名文法）；规范性细节见 [docs/abi.md](../abi.md)。桥对这一面**只读**——外部工作区永不经 ABI 写入。
+**ABI 面就是整个 `wiki/`**——加装域的领土在内（bili/lark/cuhksz 的页面类型照常服务），`wiki/tmp/` 在外（tmp 的派生层不可见语义延伸到 ABI）。页面按 wiki 相对路径寻址（即 `[[...]]` 链接语法的全名文法）；规范性细节见 [docs/abi.md](abi.md)。桥对这一面**只读**——外部工作区永不经 ABI 写入。
 
 ### 协议 vs 域 vs 内核——三测试
 
