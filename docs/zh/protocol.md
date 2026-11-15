@@ -6,7 +6,7 @@
 
 **llmwiki → vault-wiki → OWFA 默认协议。**「给 agent 经营的信息库配一套 wiki over 纯文件 vault」的想法源于 llmwiki，在 vault-wiki 框架中成形（2026-08 个人 vault 建立；09-08 插件原型落地），自 OWFA v0.4 起以独立包发布——即本套件 **personal**，该组织原则的第一个、目前也是唯一的一个实现。
 
-先说清一个用语：「协议」在此是理解框架，不是已声明的包类型。本套件在 [PKG.yaml](../../PKG.yaml) 中声明的是 `kind: suite`；内核今天没有 `kind: protocol`，没有协议 ABI，也没有按协议分变体的机制——那些是未裁决的想法，不是在位的机器。本文描述的是 21 个成员加 `pipeline.py` 实际实现的东西。
+先说清一个用语：自框架 0.4.3 起，内核已支持 `kind: protocol`（随 `protocol:` 字段与 org 能力声明），本包即为首个协议包——`protocol: vaultwiki`、`provides: vaultwiki.org.v1`。协议 ABI 与按协议分变体仍是未裁决的想法，不是在位的机器。本文描述的是 21 个成员加 `pipeline.py` 实际实现的东西。
 
 ## 协议是什么
 
@@ -81,7 +81,7 @@
 
 ## 成员名册
 
-21 个成员（版本逐字取自各自 PLUGIN.yaml；包 `personal` v0.1.1、`kind: suite`、`compat: ">= 0.4"`）：
+21 个成员（版本逐字取自各自 PLUGIN.yaml；包 `personal` v0.1.2、`kind: protocol` / `protocol: vaultwiki`、`compat: ">= 0.4.3"`）：
 
 | id | 一句话 | 版本 |
 |---|---|---|

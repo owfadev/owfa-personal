@@ -6,7 +6,7 @@
 
 **llmwiki → vault-wiki → the OWFA default protocol.** The idea of organizing an agent-worked information repository as a wiki over a plain-file vault was born as llmwiki, took shape as the vault-wiki framework (2026-08 the personal vault founded; 09-08 the plugin prototype landed), and since OWFA v0.4 ships as this package — the **personal** suite, the first and currently the only implementation of that organization principle.
 
-One terminology note before anything else: "protocol" here is a conceptual framing. As a package, this suite declares `kind: suite` in [PKG.yaml](../PKG.yaml); there is no `kind: protocol` in the kernel today, no protocol ABI, and no per-protocol variants — those remain undecided ideas, not existing machinery. What this document describes is what the 21 members plus `pipeline.py` actually implement.
+One terminology note before anything else: since framework 0.4.3 the kernel recognizes `kind: protocol` (with the `protocol:` field and an org-capability declaration), and this package declares it: `protocol: vaultwiki`, `provides: vaultwiki.org.v1` — the first protocol package. The protocol ABI and per-protocol variants remain undecided ideas, not existing machinery. What this document describes is what the 21 members plus `pipeline.py` actually implement.
 
 ## What the Protocol Is
 
@@ -81,7 +81,7 @@ Window parameters (the script source is the authoritative rule list): hot ≤ **
 
 ## Member Roster
 
-The 21 members (versions verbatim from each PLUGIN.yaml; package `personal` v0.1.1, `kind: suite`, `compat: ">= 0.4"`):
+The 21 members (versions verbatim from each PLUGIN.yaml; package `personal` v0.1.2, `kind: protocol` / `protocol: vaultwiki`, `compat: ">= 0.4.3"`):
 
 | id | one line | version |
 |---|---|---|
